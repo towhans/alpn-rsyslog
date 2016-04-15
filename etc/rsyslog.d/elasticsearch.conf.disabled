@@ -22,10 +22,10 @@ template(name="plain-syslog"
       constant(value="\",\"message\":\"")    property(name="msg" format="json")
     constant(value="\"}")
 }
-action(type="omelasticsearch"
-       server="elasticsearch.service.consul"
-       serverport="9200"
-       template="plain-syslog"
-       searchIndex="logstash-index"
-       dynSearchIndex="on"
-       action.resumeretrycount="-1")
+!kern.* action(type="omelasticsearch"
+               server="elasticsearch.service.consul"
+               serverport="9200"
+               template="plain-syslog"
+               searchIndex="logstash-index"
+               dynSearchIndex="on"
+               action.resumeretrycount="-1")
