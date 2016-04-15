@@ -1,0 +1,6 @@
+# Send a native logstash json event to the logstash server
+# https://gist.github.com/jdutton/5295456
+
+$template ls_json,"{%timestamp:::date-rfc3339,jsonf:@timestamp%,\"@message\":\"%msg:::json%\",\"@fields\":{%fromhost:::jsonf:host%,%syslogfacility-text:::jsonf:syslog_facility%,%syslogfacility:::jsonf:syslog_facility_code%,%syslogseverity-text:::jsonf:syslog_severity%,%syslogseverity:::jsonf:syslog_severity_code%,%app-name:::jsonf:program%,%procid:::jsonf:pid%}}"
+
+*.* @logstash.service.consul:55514;ls_json
