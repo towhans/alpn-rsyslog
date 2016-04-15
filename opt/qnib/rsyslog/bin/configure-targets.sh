@@ -2,7 +2,7 @@
 
 DEFAULT=true
 if [ "X${FORWARD_TO_ELASTICSEARCH}" == "Xtrue" ];then
-   ln -sf /etc/rsyslog.d/elasticsearch.conf.disabled /etc/rsyslog.d/elasticsearchconf  
+   ln -sf /etc/rsyslog.d/elasticsearch.conf.disabled /etc/rsyslog.d/elasticsearch.conf  
    DEFAULT=false
 fi
 if [ "X${FORWARD_TO_KAFKA}" == "Xtrue" ];then
