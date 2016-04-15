@@ -1,0 +1,2 @@
+$template heka,"%HOSTNAME% %APP-NAME% %msg%"
+*.info;kern.none;mail.none;authpriv.none;cron.none      @@127.0.0.1:5514;heka

@@ -1,0 +1,9 @@
+{
+  "check": {
+    "id": "syslog",
+    "name": "syslog",
+    "port": 514,
+    "script": "supervisorctl status|egrep '^rsyslog\\s+RUNNING'",
+    "interval": "10s"
+  }
+}
