@@ -27,7 +27,7 @@ RUN apk add --update autoconf automake curl-dev g++ gnutls-dev json-c-dev libee-
  && wget -qO - http://www.rsyslog.com/files/download/rsyslog/rsyslog-${RSYSLOG_VER}.tar.gz |tar xfz - -C /opt/ \
  && cd /opt/rsyslog-${RSYSLOG_VER} \
  && cat /tmp/rsyslog.h >> runtime/rsyslog.h \
- && ./configure --prefix=/usr/ --enable-elasticsearch --enable-imfile --enable-imptcp --enable-impstats \
+ && ./configure --prefix=/usr/ --enable-elasticsearch --enable-imfile --enable-imptcp --enable-impstats --enable-mmjsonparse \
  && make \
  && make install \
  && rm -rf /var/cache/apk/*
