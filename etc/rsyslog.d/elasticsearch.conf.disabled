@@ -1,4 +1,5 @@
-module(load="omelasticsearch")
+action(type="mmjsonparse") # parse CEE-formatted messages
+
 template(name="logstash-index"
   type="list") {
     constant(value="logstash-")
@@ -9,23 +10,21 @@ template(name="logstash-index"
     property(name="timereported" dateFormat="rfc3339" position.from="9" position.to="10")
 }
 
-# this is for formatting our syslog in JSON with @timestamp
-
-template(name="plain-syslog"
-  type="list") {
-    constant(value="{")
-      constant(value="\"timestamp\":\"")     property(name="timereported" dateFormat="rfc3339")
-      constant(value="\",\"host\":\"")        property(name="hostname")
-      constant(value="\",\"severity\":\"")    property(name="syslogseverity-text")
-      constant(value="\",\"facility\":\"")    property(name="syslogfacility-text")
-      constant(value="\",\"tag\":\"")   property(name="syslogtag" format="json")
-      constant(value="\",\"message\":\"")    property(name="msg" format="json")
-    constant(value="\"}")
+template(name="messageToES" type="list") {
+   constant(value="{\"timestamp\":\"")     property(name="timereported" dateFormat="rfc3339")
+   constant(value="\",\"syslogtag\":\"")   property(name="syslogtag" format="json")
+   constant(value="\",\"host\":\"")        property(name="hostname" format="json")
+   constant(value="\",\"severity\":\"")    property(name="syslogseverity-text")
+   constant(value="\",\"facility\":\"")    property(name="syslogfacility-text")
+   constant(value="\",")
+# start from the 2nd position to omit the left
+   property(name="$!all-json" position.from="2")
 }
-!kern.* action(type="omelasticsearch"
-               server="elasticsearch.service.consul"
-               serverport="9200"
-               template="plain-syslog"
-               searchIndex="logstash-index"
-               dynSearchIndex="on"
-               action.resumeretrycount="-1")
+
+*.*,kern.none action(type="omelasticsearch"
+             server="elasticsearch.service.consul"
+             serverport="9200"
+             template="messageToES"
+             searchIndex="logstash-index"
+             dynSearchIndex="on"
+             action.resumeretrycount="-1")
