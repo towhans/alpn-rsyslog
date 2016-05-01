@@ -1,5 +1,15 @@
 FROM qnib/alpn-consul
 
+ENV RSYSLOG_VER=8.16.0
+ADD patch/rsyslog.h /tmp/
+RUN apk add --update autoconf automake curl-dev g++ gnutls-dev json-c-dev libee-dev libestr-dev libgcrypt-dev liblogging-dev libnet-dev libtool make net-snmp-dev perl py-docutils tar util-linux-dev wget zlib-dev \
+ && wget -qO - http://www.rsyslog.com/files/download/rsyslog/rsyslog-${RSYSLOG_VER}.tar.gz |tar xfz - -C /opt/ \
+ && cd /opt/rsyslog-${RSYSLOG_VER} \
+ && cat /tmp/rsyslog.h >> runtime/rsyslog.h \
+ && ./configure --prefix=/usr/ --enable-elasticsearch --enable-imfile --enable-imptcp --enable-impstats --enable-mmjsonparse \
+ && make \
+ && make install \
+ && rm -rf /var/cache/apk/*
 ENV FORWARD_TO_ELASTICSEARCH=false \
     FORWARD_TO_KAFKA=false \
     FORWARD_TO_HEKA=false \
@@ -21,13 +31,3 @@ ADD etc/rsyslog.d/file.conf.disabled \
     etc/rsyslog.d/elasticsearch.conf.disabled \
     etc/rsyslog.d/logstash.conf.disabled \
     /etc/rsyslog.d/
-ENV RSYSLOG_VER=8.16.0
-ADD patch/rsyslog.h /tmp/
-RUN apk add --update autoconf automake curl-dev g++ gnutls-dev json-c-dev libee-dev libestr-dev libgcrypt-dev liblogging-dev libnet-dev libtool make net-snmp-dev perl py-docutils tar util-linux-dev wget zlib-dev \
- && wget -qO - http://www.rsyslog.com/files/download/rsyslog/rsyslog-${RSYSLOG_VER}.tar.gz |tar xfz - -C /opt/ \
- && cd /opt/rsyslog-${RSYSLOG_VER} \
- && cat /tmp/rsyslog.h >> runtime/rsyslog.h \
- && ./configure --prefix=/usr/ --enable-elasticsearch --enable-imfile --enable-imptcp --enable-impstats --enable-mmjsonparse \
- && make \
- && make install \
- && rm -rf /var/cache/apk/*

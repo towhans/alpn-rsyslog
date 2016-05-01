@@ -22,7 +22,7 @@ template(name="plain-syslog"
       constant(value="\",\"message\":\"")    property(name="msg" format="json")
     constant(value="\"}")
 }
-!kern.* action(type="omelasticsearch"
+*.*,kern.none action(type="omelasticsearch"
                server="elasticsearch.service.consul"
                serverport="9200"
                template="plain-syslog"
