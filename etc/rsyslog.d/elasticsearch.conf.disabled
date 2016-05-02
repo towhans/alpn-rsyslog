@@ -17,7 +17,7 @@ template(name="messageToES" type="list") {
    constant(value="\",\"severity\":\"")    property(name="syslogseverity-text")
    constant(value="\",\"facility\":\"")    property(name="syslogfacility-text")
    constant(value="\",")
-# start from the 2nd position to omit the left
+ # start from the 2nd position to omit the left
    property(name="$!all-json" position.from="2")
 }
 
