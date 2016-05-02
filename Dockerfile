@@ -9,6 +9,7 @@ RUN apk add --update autoconf automake curl-dev g++ gnutls-dev json-c-dev libee-
  && ./configure --prefix=/usr/ --enable-elasticsearch --enable-imfile --enable-imptcp --enable-impstats --enable-mmjsonparse \
  && make \
  && make install \
+ && apk del autoconf automake g++ libtool make tar wget \
  && rm -rf /var/cache/apk/*
 ENV FORWARD_TO_ELASTICSEARCH=false \
     FORWARD_TO_KAFKA=false \
