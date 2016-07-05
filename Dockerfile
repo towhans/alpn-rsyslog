@@ -1,4 +1,4 @@
-FROM qnib/alpn-consul
+FROM qnib/alpn-consul:3.2
 
 ENV RSYSLOG_VER=8.16.0
 ADD patch/rsyslog.h /tmp/
