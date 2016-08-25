@@ -1,6 +1,11 @@
 FROM qnib/alpn-consul
 
-ENV RSYSLOG_VER=8.16.0
+ARG RSYSLOG_VER=8.16.0
+ENV FORWARD_TO_ELASTICSEARCH=false \
+    FORWARD_TO_KAFKA=false \
+    FORWARD_TO_HEKA=false \
+    FORWARD_TO_LOGSTASH=false \
+    FORWARD_TO_FILE=false
 ADD patch/rsyslog.h /tmp/
 RUN apk add --update autoconf automake curl-dev g++ gnutls-dev json-c-dev libee-dev libestr-dev libgcrypt-dev liblogging-dev libnet-dev libtool make net-snmp-dev perl py-docutils tar util-linux-dev wget zlib-dev \
  && wget -qO - http://www.rsyslog.com/files/download/rsyslog/rsyslog-${RSYSLOG_VER}.tar.gz |tar xfz - -C /opt/ \
@@ -11,11 +16,6 @@ RUN apk add --update autoconf automake curl-dev g++ gnutls-dev json-c-dev libee-
  && make install \
  && apk del autoconf automake g++ libtool make tar wget \
  && rm -rf /var/cache/apk/*
-ENV FORWARD_TO_ELASTICSEARCH=false \
-    FORWARD_TO_KAFKA=false \
-    FORWARD_TO_HEKA=false \
-    FORWARD_TO_LOGSTASH=false \
-    FORWARD_TO_FILE=false
 ADD etc/supervisord.d/rsyslog.ini \
     etc/supervisord.d/rsyslog_conf.ini \
     /etc/supervisord.d/
